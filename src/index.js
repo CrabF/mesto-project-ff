@@ -1,9 +1,9 @@
-import '../pages/index.css';
-import { Card } from '../scripts/card.js'
-import { UserInfo } from '../scripts/userInfo.js';
-import { Section } from '../scripts/section.js';
-import { PopupWithImage } from '../scripts/popupWithImage.js';
-import { PopupWithForm } from '../scripts/popupWithForm.js';
+import './pages/index.css';
+import { Card } from './scripts/card.js'
+import { UserInfo } from './scripts/userInfo.js';
+import { Section } from './scripts/section.js';
+import { PopupWithImage } from './scripts/popupWithImage.js';
+import { PopupWithForm } from './scripts/popupWithForm.js';
 
 //Глобальные переменные
 export const formSelectors = {
@@ -15,12 +15,12 @@ export const formSelectors = {
   errorClass: 'popup__error_visible'
 };
 
-const flowerRoute = new URL('../images/photo-gallery/tramTracks.jpg', import.meta.url);
-const snowCover = new URL('../images/photo-gallery/whiteTree.jpg', import.meta.url);
-const Magnolia = new URL('../images/photo-gallery/magnolia.jpg', import.meta.url);
-const sky = new URL('../images/photo-gallery/cloudyEvening.jpg', import.meta.url);
-const breakfast = new URL('../images/photo-gallery/horse.jpg', import.meta.url);
-const plateau = new URL('../images/photo-gallery/alone.jpg', import.meta.url);
+const flowerRoute = new URL('./images/photo-gallery/tramTracks.jpg', import.meta.url);
+const snowCover = new URL('./images/photo-gallery/whiteTree.jpg', import.meta.url);
+const Magnolia = new URL('./images/photo-gallery/magnolia.jpg', import.meta.url);
+const sky = new URL('./images/photo-gallery/cloudyEvening.jpg', import.meta.url);
+const breakfast = new URL('./images/photo-gallery/horse.jpg', import.meta.url);
+const plateau = new URL('./images/photo-gallery/alone.jpg', import.meta.url);
 
 export const initialCards = [
   {
