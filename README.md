@@ -14,4 +14,4 @@
 Добавить подсветку логотипа? Через css filter.
 
 ## Ссылка на проект
-https://crabf.github.io/mesto/
+https://crabf.github.io/mesto-project-ff/
