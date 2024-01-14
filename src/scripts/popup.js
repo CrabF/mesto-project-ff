@@ -14,10 +14,8 @@ export class Popup{
     document.removeEventListener('keydown', this._handleEscClose);
   }
     
-  _handleEscClose(evt) {
-    if (this.popup.classList.contains('popup_opened') && evt.key === 'Escape') {
+  _handleEscClose() {
       this.close();
-    }
   }
  
   rem() {
@@ -32,6 +30,5 @@ export class Popup{
         this.close();
       }
     })
-    document.addEventListener('keydown', this._handleEscClose);
   }
 }
