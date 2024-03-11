@@ -33,7 +33,12 @@
             <button class="photo-gallery__remove-button" type="button"></button>
               <div class="photo-gallery__title">
                 <h2 class="photo-gallery__description"></h2>
-                <button class="photo-gallery__like-button" type="button"></button>
+                <div class="photo-gallery__likeCounter">
+                  <button class="photo-gallery__likeCounter-button" type="button"></button>
+                  <p class="photo-gallery__likeCounter-button_count">
+                    1
+                  </p>
+                </div>
               </div>
           </li>
         </template>
@@ -48,11 +53,11 @@
       <h2 class="popup__title">Редактировать профиль</h2>
       <form class="popup__form" action="#" name="editProfile">
         <div class="popup__field">
-          <input class="popup__text" type="text" id="name" name="personalName" placeholder="Имя" required minlength="2" maxlength="40">
+          <input class="popup__text" type="text" id="name" name="personalName" placeholder="Имя" required minlength="2" maxlength="40" pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]{1,40}$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
           <span class="popup__error" id="personalName-error"></span>
         </div> 
         <div class="popup__field">
-          <input class="popup__text" type="text" id="job" name="qualification" placeholder="Специальность" required minlength="2" maxlength="200">
+          <input class="popup__text" type="text" id="job" name="qualification" placeholder="Специальность" required minlength="2" maxlength="200" pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]{1,40}$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
           <span class="popup__error" id="qualification-error"></span>
         </div>
         <button class="popup__save-button" type="submit">Сохранить</button> 
@@ -65,7 +70,7 @@
       <h2 class="popup__title">Новое место</h2>
       <form class="popup__form" action="#" name="addCard">
         <div class="popup__field">
-          <input class="popup__text" type="text" id="title" name="cardTitle" placeholder="Название" required minlength="2" maxlength="30">
+          <input class="popup__text" type="text" id="title" name="cardTitle" placeholder="Название" required minlength="2" maxlength="30" pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]{1,40}$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
           <span class="popup__error" id="cardTitle-error"></span>
        </div>
         <div class="popup__field">
@@ -83,6 +88,9 @@
       <p class="popup-card__title"></p>
       <button class="close-button"></button>
     </div>
+  </div>
+  <div class="popup" id="popupDeleteCard">
+    
   </div>
   <!-- <script type="module" src="./index.js"></script> -->
 </body>

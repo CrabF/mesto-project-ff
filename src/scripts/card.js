@@ -1,16 +1,25 @@
+import { deleteCardFromServer } from './api.js'
+
 export class Card {
-  constructor (templateSelector, name, link, handleCardClick) {
+  constructor (templateSelector, cardObj, myId, handleCardClick) {
     this._templateSelector = templateSelector;
-    this._name = name;
-    this._link = link;
+    this._name = cardObj.name;
+    this._link = cardObj.link;
     this._handleCardClick = handleCardClick;
     this._view = document.querySelector(this._templateSelector).content.cloneNode(true).children[0];
-    this._likeButton = this._view.querySelector('.photo-gallery__like-button')
+    this._likeButton = this._view.querySelector('.photo-gallery__likeCounter-button');
+    this._buttonsDeleteCards = this._view.querySelector('.photo-gallery__remove-button');
+    this.ownerId = cardObj.owner._id;
+    this.itemId = cardObj._id;
+    this.myId = myId;
   }
 
   render() {
     const imageCard = this._view.querySelector('.photo-gallery__image');
     const titleCard = this._view.querySelector('.photo-gallery__description');
+    if(this.ownerId != this.myId ) {
+      this._buttonsDeleteCards.classList.add('photo-gallery__remove-button_hide')
+    }
     this._insertContent(imageCard, titleCard);
     this._setEventListeners(imageCard);
     return this._view;
@@ -24,8 +33,7 @@ export class Card {
 
   _setEventListeners(imageCard) {
     this._likeButton.addEventListener('click',()=> this._likeCard());
-    const buttonsDeleteCards = this._view.querySelector('.photo-gallery__remove-button');
-    buttonsDeleteCards.addEventListener('click',()=> this._deleteCard());
+    this._buttonsDeleteCards.addEventListener('click',()=> this._deleteCard());
     imageCard.addEventListener('click', ()=>{
       this._handleCardClick({
         name: this._name,
@@ -37,9 +45,10 @@ export class Card {
    _deleteCard(){
     this._view.remove();
     this._view = null;
+    deleteCardFromServer(this.itemId);
   }
 
    _likeCard() {
-    this._likeButton.classList.toggle('photo-gallery__like-button_active');
+    this._likeButton.classList.toggle('photo-gallery__likeCounter-button_active');
   }
 }

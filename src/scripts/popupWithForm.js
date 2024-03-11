@@ -1,13 +1,15 @@
 import { Popup } from './popup.js';
+import { clearValidation } from './validation.js';
 export class PopupWithForm extends Popup{
-  constructor(selector, submit) {
+  constructor(selector, submit, configSelectors) {
     super(selector);
     this.submit = submit;
     this.form = this.popup.querySelector('.popup__form');
     this.inputs = Array.from(this.form.querySelectorAll('input'));
+    this.configSelectors = configSelectors;
     this.setEventListeners();
   }
-  
+
   open() {
     super.open();
   }
@@ -28,7 +30,7 @@ export class PopupWithForm extends Popup{
   }
 
   close() {
-    this.form.reset();
+    clearValidation(this.form, this.configSelectors);
     super.close();
   }
 }
