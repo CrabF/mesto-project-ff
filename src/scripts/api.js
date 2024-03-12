@@ -97,3 +97,35 @@ export const deleteCardFromServer = (cardId)=>{
     }
   })
 }
+
+//Лайк карточки
+
+export const likeCard = (cardId)=>{
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`,{
+    method: 'PUT',
+    headers: config.headers
+  })
+  .then(response => {
+    if(response.ok){
+      return response.json()
+    } else {
+      return Promise.reject(`Ошибка: ${response.status}`);
+    }
+  })
+}
+
+//Убрать лайк с карточки
+
+export const removeLike = (cardId)=>{
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`,{
+    method: 'DELETE',
+    headers: config.headers
+  })
+  .then(response => {
+    if(response.ok){
+      return response.json()
+    } else {
+      return Promise.reject(`Ошибка: ${response.status}`);
+    }
+  })
+}

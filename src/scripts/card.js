@@ -1,4 +1,4 @@
-import { deleteCardFromServer } from './api.js'
+import { deleteCardFromServer, likeCard, removeLike } from './api.js'
 
 export class Card {
   constructor (templateSelector, cardObj, myId, handleCardClick) {
@@ -10,8 +10,10 @@ export class Card {
     this._likeButton = this._view.querySelector('.photo-gallery__likeCounter-button');
     this._buttonsDeleteCards = this._view.querySelector('.photo-gallery__remove-button');
     this.ownerId = cardObj.owner._id;
-    this.itemId = cardObj._id;
+    this.cardId = cardObj._id;
     this.myId = myId;
+    this.arrayLikes = cardObj.likes
+    // console.log(this.arrayLikes)
   }
 
   render() {
@@ -45,10 +47,29 @@ export class Card {
    _deleteCard(){
     this._view.remove();
     this._view = null;
-    deleteCardFromServer(this.itemId);
+    deleteCardFromServer(this.cardId)
+      .catch((err)=>{
+        console.log(err)
+      });
   }
 
    _likeCard() {
-    this._likeButton.classList.toggle('photo-gallery__likeCounter-button_active');
+
+    this.arrayLikes.forEach((likeObj)=>{
+      // console.log(likeObj)
+      if (likeObj._id != this.myId) {
+        likeCard(this.cardId)
+        .catch((err)=>{
+          console.log(err)
+        })
+      this._likeButton.classList.add('photo-gallery__likeCounter-button_active');
+      } else {
+        removeLike(this.cardId);
+        this._likeButton.classList.remove('photo-gallery__likeCounter-button_active');
+      }
+    })
+    
   }
 }
+
+//Попробовать через цикл let i

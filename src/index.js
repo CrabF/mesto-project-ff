@@ -8,7 +8,7 @@ import { UserInfo } from './scripts/userInfo.js';
 import { Section } from './scripts/section.js';
 import { PopupWithImage } from './scripts/popupWithImage.js';
 import { PopupWithForm } from './scripts/popupWithForm.js';
-import { patchProfile, getCards, getProfileInfo, postNewCard } from './scripts/api.js';
+import { patchProfile, getCards, getProfileInfo, postNewCard, likeCard, removeLike } from './scripts/api.js';
 import { enableValidation } from './scripts/validation.js'
 
 let myId;
@@ -32,20 +32,9 @@ Promise.all([getProfileInfo(), getCards()])
     console.log(err)
   })
   
-//Получение профиля с сервера
-
-// getProfileInfo()
-// avatar.src = result.avatar;
-// profileName.textContent = result.name;
-// profileDescription.textContent = result.about;
-  // .catch((err)=>{
-  //   console.log(err);
-  // });
-
 //Включение валдиации
 
 enableValidation(formSelectors);
-
 
 //Попап редактирования профиля
 
@@ -98,26 +87,9 @@ function handleCardClick(item) {
 }
 
 
-//Получение карточек с сервера
-
-
-
-  // getCards()
-  //   .then((cardsObj)=>{
-  //     cardsSection = new Section({
-  //         items: cardsObj,
-  //         renderer: item => createCard(item.name, item.link, item.owner._id, item._id).render()
-  //       }, '.photo-gallery');
-  //     cardsSection.renderItems();
-  //   })
-  //   .catch((err)=>{
-  //     console.log(err) ;
-  // })
-
-
-  function createCard(cardObj, myId){
-    return new Card('#cards', cardObj, myId, handleCardClick)
-  }
+function createCard(cardObj, myId){
+  return new Card('#cards', cardObj, myId, handleCardClick)
+}
 
  
 
