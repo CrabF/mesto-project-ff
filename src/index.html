@@ -14,7 +14,8 @@
   </header>
   <main>
     <section class="profile">
-      <img class="profile__avatar" src="<%=require('./images/profile/ded.jpg')%>" alt="Улыбающийся дед">
+      <div class="profile__avatar" style="background-image: url(https://www.mirf.ru/wp-content/uploads/2021/11/piltower.jpg)">
+      </div>
       <!-- <img class="profile__avatar" src="../images/profile/ded.jpg" alt="Улыбающийся дед"> -->
       <div class="profile__info">
         <div class="profile__title">
@@ -36,7 +37,6 @@
                 <div class="photo-gallery__likeCounter">
                   <button class="photo-gallery__likeCounter-button" type="button"></button>
                   <p class="photo-gallery__likeCounter-button_count">
-                    1
                   </p>
                 </div>
               </div>
@@ -46,7 +46,7 @@
     </div>
   </main>
   <footer class="footer">
-    <p class="footer__copyright">© 2023 Mesto Russia</p>
+    <p class="footer__copyright">© 2024 Mesto Russia</p>
   </footer>
   <div class="popup" id="editPopup">
     <div class="popup__container">
@@ -89,7 +89,18 @@
       <button class="close-button"></button>
     </div>
   </div>
-  <div class="popup" id="popupDeleteCard">
+  <div class="popup" id="popupUpdateAvatar">
+    <div class="popup__container">
+      <h2 class="popup__title">Обновить аватар</h2>
+      <form class="popup__form" action="#" name="updateAvatar">
+        <div class="popup__field">
+          <input class="popup__text" id="avatarRef" name="avatarLink" placeholder="Ссылка на аватар" required type="url">
+          <span class="popup__error" id="avatarLink-error"></span>
+        </div>
+        <button class="popup__save-button" type="submit">Сохранить</button> 
+      </form>
+      <button class="close-button" type="reset"></button>
+    </div>
     
   </div>
   <!-- <script type="module" src="./index.js"></script> -->

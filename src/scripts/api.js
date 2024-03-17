@@ -129,3 +129,22 @@ export const removeLike = (cardId)=>{
     }
   })
 }
+
+//Обновление аватара
+
+export const updateAvatar = (link)=>{
+  return fetch(`${config.baseUrl}/users/me/avatar`,{
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: link
+    })
+  })
+  .then(response => {
+    if(response.ok){
+      return response.json()
+    } else {
+      return Promise.reject(`Ошибка: ${response.status}`);
+    }
+  })
+}

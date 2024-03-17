@@ -12,7 +12,9 @@ export class Card {
     this.ownerId = cardObj.owner._id;
     this.cardId = cardObj._id;
     this.myId = myId;
-    this.arrayLikes = cardObj.likes
+    this.arrayLikes = cardObj.likes;
+    this.counterLikes =  this._view.querySelector('.photo-gallery__likeCounter-button_count');
+   
     // console.log(this.arrayLikes)
   }
 
@@ -21,7 +23,20 @@ export class Card {
     const titleCard = this._view.querySelector('.photo-gallery__description');
     if(this.ownerId != this.myId ) {
       this._buttonsDeleteCards.classList.add('photo-gallery__remove-button_hide')
+    };
+    if (this.arrayLikes.length > 0) {
+      this.counterLikes.textContent = this.arrayLikes.length
     }
+
+
+    let includeMyIndex = this.arrayLikes.findIndex((element)=>{
+      return element._id === this.myId
+    })
+
+    if (includeMyIndex >= 0){
+      this._likeButton.classList.add('photo-gallery__likeCounter-button_active')
+    }
+
     this._insertContent(imageCard, titleCard);
     this._setEventListeners(imageCard);
     return this._view;
@@ -48,28 +63,54 @@ export class Card {
     this._view.remove();
     this._view = null;
     deleteCardFromServer(this.cardId)
-      .catch((err)=>{
-        console.log(err)
-      });
+      // .catch((err)=>{
+      //   console.log(err)
+      // });
   }
 
    _likeCard() {
+   
 
-    this.arrayLikes.forEach((likeObj)=>{
-      // console.log(likeObj)
-      if (likeObj._id != this.myId) {
-        likeCard(this.cardId)
-        .catch((err)=>{
-          console.log(err)
-        })
-      this._likeButton.classList.add('photo-gallery__likeCounter-button_active');
-      } else {
-        removeLike(this.cardId);
-        this._likeButton.classList.remove('photo-gallery__likeCounter-button_active');
-      }
+
+    let includeMyIndex = this.arrayLikes.findIndex((element)=>{
+      return element._id === this.myId
     })
+
+    if (includeMyIndex === -1){
+      likeCard(this.cardId)
+        .then((res)=>{
+          this.arrayLikes = res.likes
+          this.counterLikes.textContent = this.arrayLikes.length
+          this._likeButton.classList.add('photo-gallery__likeCounter-button_active');
+        })
+
+
+    } else {
+      removeLike(this.cardId)
+      .then((res)=>{
+        this.arrayLikes = res.likes
+        if (this.arrayLikes.length === 0) {
+          this.counterLikes.textContent = null
+        } else {
+          this.counterLikes.textContent = this.arrayLikes.length
+        }
+        this._likeButton.classList.remove('photo-gallery__likeCounter-button_active');
+      })    
+    }
+
+  
+      
+
+      // console.log(this.cardId)
+      // console.log(this.arrayLikes)
+      // .catch((err)=>{
+      //   console.log(err)
+      // })
+    // this._likeButton.classList.add('photo-gallery__likeCounter-button_active');
+ 
+    //   removeLike(this.cardId);
+    //   this._likeButton.classList.remove('photo-gallery__likeCounter-button_active');
     
   }
 }
-
-//Попробовать через цикл let i
+//Попробовать через findindex

@@ -2,5 +2,26 @@
   border-radius: 50%;
   height: 120px;
   width: 120px;
-  object-fit: cover;
+  /* background-image: url(../../../images/profile/ded.jpg); */
+  background-position: center center;
+  background-size: cover;
+  position: relative;
+  cursor: pointer;
+}
+
+.profile__avatar::after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  transition: .8ms;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.profile__avatar:hover::after {
+  background-color: rgba(0, 0, 0, .8);
+  background-image: url(../../../images/profile/editProfilePencil.svg);
 }

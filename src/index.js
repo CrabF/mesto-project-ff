@@ -8,7 +8,7 @@ import { UserInfo } from './scripts/userInfo.js';
 import { Section } from './scripts/section.js';
 import { PopupWithImage } from './scripts/popupWithImage.js';
 import { PopupWithForm } from './scripts/popupWithForm.js';
-import { patchProfile, getCards, getProfileInfo, postNewCard, likeCard, removeLike } from './scripts/api.js';
+import { patchProfile, getCards, getProfileInfo, postNewCard, updateAvatar } from './scripts/api.js';
 import { enableValidation } from './scripts/validation.js'
 
 let myId;
@@ -16,9 +16,8 @@ let cardsSection;
 
 Promise.all([getProfileInfo(), getCards()])
   .then((results)=>{
-
     myId = results[0]._id;
-    avatar.src = results[0].avatar;
+    avatar.style.backgroundImage = `url("${results[0].avatar}")`;
     profileName.textContent = results[0].name;
     profileDescription.textContent = results[0].about;
     
@@ -31,6 +30,7 @@ Promise.all([getProfileInfo(), getCards()])
   .catch((err)=>{
     console.log(err)
   })
+  console.log(avatar.style.backgroundImage)
   
 //Включение валдиации
 
@@ -47,7 +47,7 @@ editButton.addEventListener('click', ()=>{
 });
 
 
-const popupEditOpened = new PopupWithForm('#editPopup', async (formData)=> {
+const popupEditOpened = new PopupWithForm('#editPopup', (formData)=> {
   userInfo.setUserInfo({name: formData.personalName, description: formData.qualification});
   //активировать загрузку await
    patchProfile(formData)
@@ -91,7 +91,24 @@ function createCard(cardObj, myId){
   return new Card('#cards', cardObj, myId, handleCardClick)
 }
 
- 
+
+//Открытие  попапа редактирования профиля
+
+const popupUpdateAvatarOpened = new PopupWithForm('#popupUpdateAvatar', (formData)=>{
+  updateAvatar(document.querySelector('#avatarRef').value)
+    .then((result)=>{
+      avatar.style.backgroundImage = `url("${result.avatar}")`;
+    })
+    .catch((err)=>{
+      console.log(err);
+    });
+}, formSelectors);
+
+avatar.addEventListener('click', ()=>{
+  popupUpdateAvatarOpened.open();
+})
+
+
 
 
 
