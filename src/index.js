@@ -45,9 +45,11 @@ editButton.addEventListener('click', ()=>{
 });
 
 const popupEditOpened = new PopupWithForm('#editPopup', (formData)=> {
-  
+  const submitButton = document.querySelector('#edit-save-button')
+  submitButton.textContent = 'Сохранение...'
    patchProfile(formData)
     .then((result)=>{
+      submitButton.textContent = 'Сохранить'
       userInfo.setUserInfo({name: result.name, description: result.about});
     })
     .catch((err)=>{
@@ -63,9 +65,11 @@ const popupEditOpened = new PopupWithForm('#editPopup', (formData)=> {
 const popupAddCardOpened = new PopupWithForm('#popupAddCard', (formData)=>{
 
 //Загрузка на сервер новой картинки
-
+  const submitButton = document.querySelector('#add-save-button')
+  submitButton.textContent = 'Сохранение...'
   postNewCard(formData.cardTitle, formData.cardLink)
     .then((result)=>{
+      submitButton.textContent = 'Создать'
       const newCard = createCard(result, myId);
       cardsSection.addItem(newCard.render());
       popupAddCardOpened.close();
@@ -73,6 +77,7 @@ const popupAddCardOpened = new PopupWithForm('#popupAddCard', (formData)=>{
     .catch((err)=>{
       console.log(err)
     })
+  
 }, formSelectors) 
 
 buttonAddCard.addEventListener('click', ()=>{
@@ -94,8 +99,11 @@ function createCard(cardObj, myId){
 //Открытие  попапа редактирования профиля
 
 const popupUpdateAvatarOpened = new PopupWithForm('#popupUpdateAvatar', (formData)=>{
+  const submitButton = document.querySelector('#update-save-button')
+  submitButton.textContent = 'Сохранение...'
   updateAvatar(document.querySelector('#avatarRef').value)
     .then((result)=>{
+      submitButton.textContent = 'Сохранить'
       avatar.style.backgroundImage = `url("${result.avatar}")`;
     })
     .catch((err)=>{
