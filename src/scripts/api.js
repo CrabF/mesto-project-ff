@@ -9,7 +9,7 @@ const config = {
 //Patch Редактирование профиля
 
 export const patchProfile = (formData)=>{
-  return fetch(`${config.baseUrl}/users/me  `, {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
@@ -39,9 +39,6 @@ export const getCards = ()=>{
       return Promise.reject(`Ошибка: ${response.status}`);
     }
   })
-  .then((result) => {
-    return result
-  })
 }
 
 // GET профиля
@@ -57,9 +54,6 @@ export const getProfileInfo = ()=>{
         return Promise.reject(`Ошибка: ${response.status}`)
       }
     })
-    .then((result) => {
-      return result
-    });
 }
 
 //POST новых карточек

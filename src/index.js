@@ -1,6 +1,5 @@
 import {
-  formSelectors, initialCards, editButton, profileInput, descriptionInput,
-  forms, buttonAddCard, avatar, profileName, profileDescription
+  formSelectors, editButton, profileInput, descriptionInput, buttonAddCard, avatar, profileName, profileDescription
 } from './scripts/utils/constants.js';
 import './pages/index.css';
 import { Card } from './scripts/card.js'
@@ -30,8 +29,7 @@ Promise.all([getProfileInfo(), getCards()])
   .catch((err)=>{
     console.log(err)
   })
-  console.log(avatar.style.backgroundImage)
-  
+
 //Включение валдиации
 
 enableValidation(formSelectors);
@@ -46,15 +44,16 @@ editButton.addEventListener('click', ()=>{
   descriptionInput.value = description;
 });
 
-
 const popupEditOpened = new PopupWithForm('#editPopup', (formData)=> {
-  userInfo.setUserInfo({name: formData.personalName, description: formData.qualification});
-  //активировать загрузку await
+  
    patchProfile(formData)
+    .then((result)=>{
+      userInfo.setUserInfo({name: result.name, description: result.about});
+    })
     .catch((err)=>{
       console.log(err);
     });
-  //выключить загрузку
+
   popupEditOpened.close();
 }, formSelectors);
 
@@ -62,10 +61,12 @@ const popupEditOpened = new PopupWithForm('#editPopup', (formData)=> {
 //
 
 const popupAddCardOpened = new PopupWithForm('#popupAddCard', (formData)=>{
-  //Загрузка на сервер новой картинки
+
+//Загрузка на сервер новой картинки
+
   postNewCard(formData.cardTitle, formData.cardLink)
-    .then((data)=>{
-      const newCard = createCard(data, myId);
+    .then((result)=>{
+      const newCard = createCard(result, myId);
       cardsSection.addItem(newCard.render());
       popupAddCardOpened.close();
     })
@@ -86,11 +87,9 @@ function handleCardClick(item) {
   openPopupWithImage.open(item.name, item.link);
 }
 
-
 function createCard(cardObj, myId){
   return new Card('#cards', cardObj, myId, handleCardClick)
 }
-
 
 //Открытие  попапа редактирования профиля
 
@@ -107,15 +106,3 @@ const popupUpdateAvatarOpened = new PopupWithForm('#popupUpdateAvatar', (formDat
 avatar.addEventListener('click', ()=>{
   popupUpdateAvatarOpened.open();
 })
-
-
-
-
-
-
-  // 1. при очистке валидации - остается отступ
-  // 2. если запэтчить невалидные данные, они сохранятся , но не будут отправлены на сервер. Нужно, чтобы при ошибка от сервера - не сохранялись данные. Идентичная проблема с добавлением новой карточки
-  // 3. добавить класс hide для remove button при getCards
-  // 4. на все корзинки сделать листенер и колбек функцию делит
-  // 5. если функции CreateCard передать два аргумента из трех, норм?
-  // 6. После пост запроса ебашить гет, чтобы были id для лайкво и удаления

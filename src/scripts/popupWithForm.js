@@ -1,5 +1,6 @@
 import { Popup } from './popup.js';
 import { clearValidation } from './validation.js';
+
 export class PopupWithForm extends Popup{
   constructor(selector, submit, configSelectors) {
     super(selector);

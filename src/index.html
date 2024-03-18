@@ -4,19 +4,16 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <link rel="stylesheet" href="../pages/index.css"> -->
   <title>Mesto</title>
 </head>
 <body class="root">
   <header class="header"> 
     <img class="header__logo" src="<%=require('./images/header/LogoMesto.svg')%>" alt="Логотип Место">
-    <!-- <img class="header__logo" src="../images/header/LogoMesto.svg" alt="Логотип Место"> -->
   </header>
   <main>
     <section class="profile">
       <div class="profile__avatar" style="background-image: url(https://www.mirf.ru/wp-content/uploads/2021/11/piltower.jpg)">
       </div>
-      <!-- <img class="profile__avatar" src="../images/profile/ded.jpg" alt="Улыбающийся дед"> -->
       <div class="profile__info">
         <div class="profile__title">
           <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -34,9 +31,9 @@
             <button class="photo-gallery__remove-button" type="button"></button>
               <div class="photo-gallery__title">
                 <h2 class="photo-gallery__description"></h2>
-                <div class="photo-gallery__likeCounter">
-                  <button class="photo-gallery__likeCounter-button" type="button"></button>
-                  <p class="photo-gallery__likeCounter-button_count">
+                <div class="photo-gallery__like-counter">
+                  <button class="photo-gallery__like-counter-button" type="button"></button>
+                  <p class="photo-gallery__like-counter-button_count">
                   </p>
                 </div>
               </div>
@@ -101,8 +98,6 @@
       </form>
       <button class="close-button" type="reset"></button>
     </div>
-    
   </div>
-  <!-- <script type="module" src="./index.js"></script> -->
 </body>
 </html>

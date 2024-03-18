@@ -2,7 +2,6 @@
   border-radius: 50%;
   height: 120px;
   width: 120px;
-  /* background-image: url(../../../images/profile/ded.jpg); */
   background-position: center center;
   background-size: cover;
   position: relative;
@@ -10,6 +9,7 @@
 }
 
 .profile__avatar::after {
+  border-radius: 50%;
   content: ' ';
   position: absolute;
   top: 0;

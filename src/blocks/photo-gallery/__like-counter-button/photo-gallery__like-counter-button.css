@@ -1,4 +1,4 @@
-.photo-gallery__likeCounter-button {
+.photo-gallery__like-counter-button {
   position: relative;
   background: url(../../../images/photo-gallery/like.svg);
   box-sizing: border-box;
@@ -12,6 +12,6 @@
   transition: 0.4s;
 }
 
-.photo-gallery__likeCounter-button:hover {
+.photo-gallery__like-counter-button:hover {
   opacity: 0.5;
 }
