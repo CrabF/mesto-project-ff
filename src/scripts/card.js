@@ -1,108 +1,99 @@
-import { deleteCardFromServer, likeCard, removeLike } from './api.js'
+import { deleteCardFromServer, likeCardForServer, removeLike } from './api.js';
 
-export class Card {
-  constructor (templateSelector, cardObj, myId, handleCardClick) {
-    this._templateSelector = templateSelector;
-    this._name = cardObj.name;
-    this._link = cardObj.link;
-    this._handleCardClick = handleCardClick;
-    this._view = document.querySelector(this._templateSelector).content.cloneNode(true).children[0];
-    this._likeButton = this._view.querySelector('.photo-gallery__like-counter-button');
-    this._buttonsDeleteCards = this._view.querySelector('.photo-gallery__remove-button');
-    this.ownerId = cardObj.owner._id;
-    this.cardId = cardObj._id;
-    this.myId = myId;
-    this.arrayLikes = cardObj.likes;
-    this.counterLikes = this._view.querySelector('.photo-gallery__like-counter-button_count');
-  }
+export function render(templateSelector, cardObj, myId, handleCardClick) {
+  const view = document.querySelector(templateSelector).content.cloneNode(true).children[0];
+  const imageCard = view.querySelector('.photo-gallery__image');
+  const titleCard = view.querySelector('.photo-gallery__description');
+  const buttonsDeleteCards = view.querySelector('.photo-gallery__remove-button');
+  const arrayLikes = cardObj.likes;
+  const likeButton = view.querySelector('.photo-gallery__like-counter-button');
+  const counterLikes = view.querySelector('.photo-gallery__like-counter-button_count');
+  const cardName = cardObj.name;
+  const cardLink = cardObj.link;
+  const ownerId = cardObj.owner._id;
 
-  render() {
-    const imageCard = this._view.querySelector('.photo-gallery__image');
-    const titleCard = this._view.querySelector('.photo-gallery__description');
-
-    if(this.ownerId != this.myId ) {
-      this._buttonsDeleteCards.classList.add('photo-gallery__remove-button_hide')
-    };
-
-    if (this.arrayLikes.length > 0) {
-      this.counterLikes.textContent = this.arrayLikes.length
-    }
-
-    let includeMyIndex = this._getMyIndex();
-
-    if (includeMyIndex >= 0){
-      this._likeButton.classList.add('photo-gallery__like-counter-button_active')
-    }
-
-    this._insertContent(imageCard, titleCard);
-    this._setEventListeners(imageCard);
-    return this._view;
-  }
-
-  _insertContent(imageCard, titleCard) {
-    imageCard.src = this._link;
-    imageCard.alt = this._name;
-    titleCard.textContent = this._name;
-  }
-
-  _setEventListeners(imageCard) {
-    this._likeButton.addEventListener('click',()=> this._likeCard());
-    this._buttonsDeleteCards.addEventListener('click',()=> this._deleteCard());
-    imageCard.addEventListener('click', ()=>{
-      this._handleCardClick({
-        name: this._name,
-        link: this._link
-      });
-      });
-  }
-
-   _deleteCard(){
-    deleteCardFromServer(this.cardId)
-      .then(()=>{
-        this._view.remove();
-        this._view = null;
-      })
-      .catch((err)=>{
-        console.log(err)
-      });
-  }
-
-  _getMyIndex() {
-    return this.arrayLikes.findIndex((element)=>{
-      return element._id === this.myId
+  imageCard.addEventListener('click', ()=>{
+    handleCardClick({
+      name: cardName,
+      link: cardLink
     })
-
+  })
+    
+  if(ownerId != myId ) {
+    buttonsDeleteCards.classList.add('photo-gallery__remove-button_hide')
   }
 
-   _likeCard() {
-    let includeMyIndex = this._getMyIndex();
+  if (arrayLikes.length > 0) {
+    counterLikes.textContent = arrayLikes.length
+  }
 
-    if (includeMyIndex === -1){
-      likeCard(this.cardId)
-        .then((res)=>{
-          this.arrayLikes = res.likes
-          this.counterLikes.textContent = this.arrayLikes.length
-          this._likeButton.classList.add('photo-gallery__like-counter-button_active');
-        })
-        .catch((err)=>{
-          console.log(err)
-        });
-    } else {
-      removeLike(this.cardId)
+  let includeMyIndex = _getMyIndex(arrayLikes, myId);
+
+  if (includeMyIndex >= 0){
+    likeButton.classList.add('photo-gallery__like-counter-button_active')
+  }
+
+  _insertContent(imageCard, titleCard, cardObj);
+  _setEventListeners(likeButton, buttonsDeleteCards, cardObj, myId, view, counterLikes);
+  return view
+}
+
+function _getMyIndex(arrayLikes, myId) {
+  return arrayLikes.findIndex((element)=>{
+    return element._id === myId
+  })
+}
+
+function _insertContent(imageCard, titleCard, cardObj) {
+  imageCard.src = cardObj.link;
+  imageCard.alt = cardObj.name;
+  titleCard.textContent = cardObj.name;
+}
+  
+function _setEventListeners(likeButton, buttonsDeleteCards, cardObj, myId, view, counterLikes) {
+  likeButton.addEventListener('click',()=> _likeCard(cardObj, myId, view, likeButton, counterLikes));
+  buttonsDeleteCards.addEventListener('click',()=> _deleteCard(cardObj, view));
+}
+
+function _likeCard(cardObj, myId, view, likeButton, counterLikes) {
+  let includeMyIndex = _getMyIndex(cardObj.likes, myId);
+  
+  if (includeMyIndex === -1){
+    likeCardForServer(cardObj._id)
       .then((res)=>{
-        this.arrayLikes = res.likes
-
-        if (this.arrayLikes.length === 0) {
-          this.counterLikes.textContent = ''
-        } else {
-          this.counterLikes.textContent = this.arrayLikes.length
-        }
-
-        this._likeButton.classList.remove('photo-gallery__like-counter-button_active');
+        cardObj.likes = res.likes
+        counterLikes.textContent = cardObj.likes.length
+        likeButton.classList.add('photo-gallery__like-counter-button_active');
       })
       .catch((err)=>{
         console.log(err)
-      }); 
-    }
+      })
+  } else {
+    removeLike(cardObj._id)
+    .then((res)=>{
+      cardObj.likes = res.likes
+  
+      if (cardObj.likes.length === 0) {
+        counterLikes.textContent = ''
+      } else {
+        counterLikes.textContent = cardObj.likes.length
+      }
+  
+      likeButton.classList.remove('photo-gallery__like-counter-button_active');
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
   }
+}
+  
+function _deleteCard(cardObj, view){
+  deleteCardFromServer(cardObj._id)
+    .then(()=>{
+      view.remove();
+      view = null;
+    })
+    .catch((err)=>{
+      console.log(err)
+  })
 }

@@ -6,9 +6,11 @@ const config = {
   }
 }
 
+export { patchProfile, getCards, getProfileInfo, postNewCard, deleteCardFromServer, likeCardForServer, removeLike, updateAvatar }
+
 //Patch Редактирование профиля
 
-export const patchProfile = (formData)=>{
+const patchProfile = (formData)=>{
   return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
     headers: config.headers,
@@ -28,7 +30,7 @@ export const patchProfile = (formData)=>{
 
 //GET начальных карточек
 
-export const getCards = ()=>{
+const getCards = ()=>{
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   })
@@ -43,7 +45,7 @@ export const getCards = ()=>{
 
 // GET профиля
 //
-export const getProfileInfo = ()=>{
+const getProfileInfo = ()=>{
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   })
@@ -58,7 +60,7 @@ export const getProfileInfo = ()=>{
 
 //POST новых карточек
 
-export const postNewCard = (cardName, cardLink)=>{
+const postNewCard = (cardName, cardLink)=>{
   return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
     headers: config.headers,
@@ -78,7 +80,7 @@ export const postNewCard = (cardName, cardLink)=>{
 
 // Удаление своих карточек с сервера
 
-export const deleteCardFromServer = (cardId)=>{
+const deleteCardFromServer = (cardId)=>{
   return fetch(`${config.baseUrl}/cards/${cardId}`,{
     method: 'DELETE',
     headers: config.headers
@@ -94,7 +96,7 @@ export const deleteCardFromServer = (cardId)=>{
 
 //Лайк карточки
 
-export const likeCard = (cardId)=>{
+const likeCardForServer = (cardId)=>{
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`,{
     method: 'PUT',
     headers: config.headers
@@ -110,7 +112,7 @@ export const likeCard = (cardId)=>{
 
 //Убрать лайк с карточки
 
-export const removeLike = (cardId)=>{
+const removeLike = (cardId)=>{
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`,{
     method: 'DELETE',
     headers: config.headers
@@ -126,7 +128,7 @@ export const removeLike = (cardId)=>{
 
 //Обновление аватара
 
-export const updateAvatar = (link)=>{
+const updateAvatar = (link)=>{
   return fetch(`${config.baseUrl}/users/me/avatar`,{
     method: 'PATCH',
     headers: config.headers,
