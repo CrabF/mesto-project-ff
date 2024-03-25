@@ -19,13 +19,7 @@ const patchProfile = (formData)=>{
       about:formData.qualification
     })
   })
-  .then(response => {
-    if(response.ok){
-      return response.json()
-    } else {
-      return Promise.reject(`Ошибка: ${response.status}`);
-    }
-  })
+  .then(handleResponse)
 }
 
 //GET начальных карточек
@@ -34,13 +28,7 @@ const getCards = ()=>{
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   })
-  .then(response => {
-    if(response.ok){
-      return response.json()
-    } else {
-      return Promise.reject(`Ошибка: ${response.status}`);
-    }
-  })
+  .then(handleResponse)
 }
 
 // GET профиля
@@ -49,13 +37,7 @@ const getProfileInfo = ()=>{
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   })
-    .then(response => {
-      if(response.ok){
-        return response.json()
-      } else {
-        return Promise.reject(`Ошибка: ${response.status}`)
-      }
-    })
+  .then(handleResponse)
 }
 
 //POST новых карточек
@@ -69,13 +51,7 @@ const postNewCard = (cardName, cardLink)=>{
       link: cardLink
     })
   })
-  .then(response => {
-    if(response.ok){
-      return response.json()
-    } else {
-      return Promise.reject(`Ошибка: ${response.status}`)
-    }
-  })
+  .then(handleResponse)
 }
 
 // Удаление своих карточек с сервера
@@ -85,13 +61,7 @@ const deleteCardFromServer = (cardId)=>{
     method: 'DELETE',
     headers: config.headers
   })
-  .then(response => {
-    if(response.ok){
-      return response.json()
-    } else {
-      return Promise.reject(`Ошибка: ${response.status}`);
-    }
-  })
+  .then(handleResponse)
 }
 
 //Лайк карточки
@@ -101,13 +71,7 @@ const likeCardForServer = (cardId)=>{
     method: 'PUT',
     headers: config.headers
   })
-  .then(response => {
-    if(response.ok){
-      return response.json()
-    } else {
-      return Promise.reject(`Ошибка: ${response.status}`);
-    }
-  })
+  .then(handleResponse)
 }
 
 //Убрать лайк с карточки
@@ -117,13 +81,7 @@ const removeLike = (cardId)=>{
     method: 'DELETE',
     headers: config.headers
   })
-  .then(response => {
-    if(response.ok){
-      return response.json()
-    } else {
-      return Promise.reject(`Ошибка: ${response.status}`);
-    }
-  })
+  .then(handleResponse)
 }
 
 //Обновление аватара
@@ -136,11 +94,15 @@ const updateAvatar = (link)=>{
       avatar: link
     })
   })
-  .then(response => {
-    if(response.ok){
-      return response.json()
-    } else {
-      return Promise.reject(`Ошибка: ${response.status}`);
-    }
-  })
+  .then(handleResponse)
+}
+
+//Обработка ответов
+
+function handleResponse(response) {
+  if(response.ok){
+    return response.json()
+  } else {
+    return Promise.reject(`Ошибка: ${response.status}`);
+  }
 }

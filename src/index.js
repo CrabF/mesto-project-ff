@@ -3,7 +3,7 @@
 import './pages/index.css';
 import { render } from './scripts/card.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
-import { patchProfile, getCards, getProfileInfo, postNewCard, updateAvatar } from './scripts/api.js';
+import { patchProfile, getCards, getProfileInfo, postNewCard, updateAvatar, likeCardForServer, removeLike, deleteCardFromServer } from './scripts/api.js';
 import { open, close } from './scripts/modal.js'
 
 //константы
@@ -39,9 +39,7 @@ let myId;
 
 Promise.all([getProfileInfo(), getCards()])
   .then((results)=>{
-    console.log(results)
     myId = results[0]._id;
-    console.log(myId)
     avatar.style.backgroundImage = `url("${results[0].avatar}")`;
     profileName.textContent = results[0].name;
     profileDescription.textContent = results[0].about;
@@ -63,7 +61,38 @@ function renderItems({items, renderer}, gallerySection) {
 }
 
 function createCard(cardObj, myId){
-  return render('#cards', cardObj, myId, handleCardClick)
+  return render('#cards', cardObj, myId, handleCardClick, likeCard, deleteCard)
+}
+
+//Лайк и удаление карточки
+
+function likeCard(cardObj, myId, likeButton, counterLikes) {
+  const includeMyIndex = getMyIndex(cardObj.likes, myId);
+  const likeMethod = includeMyIndex === -1 ? likeCardForServer : removeLike;
+  likeMethod(cardObj._id) 
+    .then((res) => {
+      cardObj.likes = res.likes 
+        counterLikes.textContent = cardObj.likes.length || '';
+        likeButton.classList.toggle('photo-gallery__like-counter-button_active');
+    })
+    .catch(err => console.log(err));
+}
+
+function deleteCard(cardObj, view){
+  deleteCardFromServer(cardObj._id)
+    .then(()=>{
+      view.remove();
+      view = null;
+    })
+    .catch((err)=>{
+      console.log(err)
+  })
+}
+
+function getMyIndex(arrayLikes, myId) {
+  return arrayLikes.findIndex((element)=>{
+    return element._id === myId
+  })
 }
 
 //Включение валидации
@@ -99,12 +128,14 @@ function editProfile(formData) {
   submitButton.textContent = 'Сохранение...'
    patchProfile(formData)
     .then((result)=>{
-      submitButton.textContent = 'Сохранить'
       setUserInfo({name: result.name, description: result.about});
       close(editPopup)
     })
     .catch((err)=>{
       console.log(err);
+  })
+  .finally(()=>{
+    submitButton.textContent = 'Сохранить'
   })
 }
 
@@ -136,13 +167,15 @@ function addNewCard(formData) {
   submitButton.textContent = 'Сохранение...'
   postNewCard(formData.cardTitle, formData.cardLink)
     .then((result)=>{
-      submitButton.textContent = 'Создать'
       const newCard = createCard(result, myId);
       gallerySection.prepend(newCard);
       close(addCardPopup)
     })
     .catch((err)=>{
       console.log(err)
+  })
+  .finally(()=>{
+    submitButton.textContent = 'Создать'
   })
 }
 
@@ -172,11 +205,13 @@ function editAvatar() {
   submitButton.textContent = 'Сохранение...'
   updateAvatar(document.querySelector('#avatarRef').value)
     .then((result)=>{
-      submitButton.textContent = 'Сохранить'
       avatar.style.backgroundImage = `url("${result.avatar}")`;
       close(editAvatarPopup)
     })
     .catch((err)=>{
       console.log(err);
+  })
+  .finally(()=>{
+    submitButton.textContent = 'Сохранить'
   })
 }
